@@ -21,7 +21,7 @@
 #' @return vector, containing the imputed weather observations of target station.It is
 #' still possible, that cases of NA remain for days none or not enough neighboring stations
 #' had observations available
-#' @example #still need to think of examples
+#' @examples #still need to think of examples
 #' @author Lars Caspersen, \email{lars.caspersen@@uni-bonn.de}
 #' @export
 patch_pca  <- function(weather, weather_info, target, method = 'nipals', nPcs = 2){

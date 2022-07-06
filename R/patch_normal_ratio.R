@@ -12,13 +12,13 @@
 #' @param weather_info data.frame containing the name / id of the weather station (needs
 #' to be the same as the column names in weather), Longitude and Latitude in
 #' decimal format
-#' @n_donors amount of auxiliary observations used to fill the gap, by default 5
+#' @param n_donors amount of auxiliary observations used to fill the gap, by default 5
 #' @param max_dist maximum distance in km of a auxiliary weather station, to be considered
 #' in the gap imputation
 #' @return vector, containing the imputed weather observations of target station.It is
 #' still possible, that cases of NA remain for days none or not enough neighboring stations
 #' had observations available
-#' @example #still need to think of examples
+#' @examples #still need to think of examples
 #' @author Lars Caspersen, \email{lars.caspersen@@uni-bonn.de}
 #' @export
 patch_normal_ratio <- function(weather, target, weather_info, n_donors = 5){
