@@ -124,6 +124,8 @@ head(weather_info)
 
 Important are the columns `id`, `Latitude` and `Longitude`. Coordinates need to be in the decimal format. The `Name` is less important, but some patching functions do not work, if also all entries in that column are unique.
 
+## How to add user-defined patching and evaluation functions?
+
 An important feature is the compatibility of weatherImpute functions and user-defined patching or evaluation functions. Here is an example how to integrate a user-defined function in `patch_flexible_several_stations`, but the concept is the same for `get_eval_one_station`. user-defined function need to be present in the work environment. The user-defined patching function needs to fulfil some general features:
 
 * it takes `weather` as an input and `weather` needs to be organized using the same principles as in `weather_Tmin

@@ -162,6 +162,8 @@ need to be in the decimal format. The `Name` is less important, but some
 patching functions do not work, if also all entries in that column are
 unique.
 
+## How to add user-defined patching and evaluation functions?
+
 An important feature is the compatibility of weatherImpute functions and
 user-defined patching or evaluation functions. Here is an example how to
 integrate a user-defined function in `patch_flexible_several_stations`,
