@@ -53,7 +53,7 @@ For more details of the function please refer to \code{\link[Amelia]{amelia}}
 }
 \examples{
 patch_amelia(weather = weather_Tmin, target = NA, 
-            weather_info = rbind(target_info, neighbour_info), rain_data = F)
+            weather_info = weather_info)
 }
 \author{
 Lars Caspersen, \email{lars.caspersen@uni-bonn.de}

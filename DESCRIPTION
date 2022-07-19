@@ -22,6 +22,7 @@ Imports:
     pcaMethods,
     Rdpack,
     reshape2,
+    rlang,
     sp
 RdMacros: Rdpack
 License: GPL-3

@@ -27,7 +27,7 @@
 #' had valid observations
 #' @examples 
 #' patch_amelia(weather = weather_Tmin, target = NA, 
-#'             weather_info = rbind(target_info, neighbour_info), rain_data = F)
+#'             weather_info = weather_info)
 #' @author Lars Caspersen, \email{lars.caspersen@@uni-bonn.de}
 #' @export
 patch_amelia <- function(weather, weather_info, rain_data = F, 

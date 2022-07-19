@@ -54,7 +54,7 @@ must be used by the user-defined patching function.
 }
 \examples{
 patch_flexible_several_stations(weather = weather_Tmin, target = c('cimis_2', 'cimis_15'),
-weather_info = rbind(target_info, neighbour_info),
+weather_info = weather_info,
 method = 'patch_normal_ratio', method_patches_everything = F)
 }
 \author{

@@ -55,7 +55,7 @@ they are equally weighted.
 \examples{
 #patch weather stations
 patched <- get_eval_one_station(weather = weather_Tmin,
-weather_info = rbind(target_info, neighbour_info),
+weather_info = weather_info,
 target = 'cimis_2', 
 patch_methods = c('patch_idw','patch_normal_ratio'), 
 method_patches_everything = c(TRUE, FALSE))

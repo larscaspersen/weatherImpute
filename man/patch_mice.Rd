@@ -60,7 +60,7 @@ take on the mice concept and missing data imputation in general.
 }
 \examples{
 patch_mice(weather = weather_Tmin, 
-weather_info = rbind(target_info, neighbour_info))
+weather_info = weather_info)
 }
 \references{
 \insertAllCited{}

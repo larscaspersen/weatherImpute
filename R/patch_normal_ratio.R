@@ -18,7 +18,10 @@
 #' @return vector, containing the imputed weather observations of target station.It is
 #' still possible, that cases of NA remain for days none or not enough neighboring stations
 #' had observations available
-#' @examples #still need to think of examples
+#' @examples 
+#' patch_normal_ratio(weather = weather_Tmin,
+#' target = 'cimis_2',
+#' weather_info = weather_info)
 #' @author Lars Caspersen, \email{lars.caspersen@@uni-bonn.de}
 #' @export
 patch_normal_ratio <- function(weather, target, weather_info, 

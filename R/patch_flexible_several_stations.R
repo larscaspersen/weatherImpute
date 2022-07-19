@@ -30,7 +30,7 @@
 #' observation none of the other stations had valid observations
 #' @examples 
 #' patch_flexible_several_stations(weather = weather_Tmin, target = c('cimis_2', 'cimis_15'),
-#' weather_info = rbind(target_info, neighbour_info),
+#' weather_info = weather_info,
 #' method = 'patch_normal_ratio', method_patches_everything = F)
 #' @author Lars Caspersen, \email{lars.caspersen@@uni-bonn.de}
 #' @import magrittr

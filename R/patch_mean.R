@@ -25,7 +25,7 @@
 #' had observations available
 #' @examples 
 #' patch_mean(weather = weather_Tmin, 
-#' weather_info = rbind(target_info, neighbour_info),
+#' weather_info = weather_info,
 #' target = 'cimis_2')
 #' @author Lars Caspersen, \email{lars.caspersen@@uni-bonn.de}
 #' @references

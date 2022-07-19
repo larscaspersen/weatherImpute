@@ -3,7 +3,7 @@
 #' Takes data.frame of daily weather data of several neighboring weather stations
 #' and imputes gaps with random forest method of the missforest package.
 #' 
-#' For more details of the function please refer to \code{\link[missForest]{missforest}}
+#' For more details of the function please refer to \code{\link[missForest]{missForest}}
 #' 
 #' @param weather data.frame with columns for each weather station and rows for
 #' each daily observation. All columns need to contain observations of the same
@@ -30,7 +30,7 @@
 #' @examples 
 #' patch_forest(weather = weather_Tmin, 
 #' target = 'cimis_2',
-#' weather_info = rbind(target_info, neighbour_info))
+#' weather_info = weather_info)
 #' @author Lars Caspersen, \email{lars.caspersen@@uni-bonn.de}
 #' @export
 patch_forest <- function(weather, target, weather_info, rain_data = F, 

@@ -40,7 +40,7 @@ This is a simple wrapper function for the \code{\link[pcaMethods]{pca}} and
 }
 \examples{
 patch_pca(weather = weather_Tmin, 
-weather_info = rbind(target_info, neighbour_info))
+weather_info = weather_info)
 }
 \author{
 Lars Caspersen, \email{lars.caspersen@uni-bonn.de}

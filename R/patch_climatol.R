@@ -24,7 +24,7 @@
 #' had valid observations
 #' @examples 
 #' patch_climatol(weather = weather_Tmin, 
-#'               weather_info = rbind(target_info, neighbour_info))
+#'               weather_info = weather_info)
 #' @author Lars Caspersen, \email{lars.caspersen@@uni-bonn.de}
 #' @export
 patch_climatol <- function(weather, weather_info, target = NA){
@@ -61,7 +61,9 @@ patch_climatol <- function(weather, weather_info, target = NA){
   }
   
   #drop year month day, date from weather
-  weather <- subset(weather, select = -c(.data$Year, .data$Month, .data$Day, .data$Date))
+  drop <- c("Year", "Month", "Day", "Date")
+  keep <- colnames(weather)[colnames(weather) %in% drop == FALSE]
+  weather <- weather[keep]
   
   #column names in weather need to be the same as in weather_info$id
   if(any(colnames(weather) %in% weather_info$id == F)){

@@ -35,7 +35,9 @@ and imputes gaps with the adjusted normal-ratio method.
 Fleshout the description. Add relevant papers
 }
 \examples{
-#still need to think of examples
+patch_normal_ratio(weather = weather_Tmin,
+target = 'cimis_2',
+weather_info = weather_info)
 }
 \author{
 Lars Caspersen, \email{lars.caspersen@uni-bonn.de}
