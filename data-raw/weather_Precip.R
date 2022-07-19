@@ -1,4 +1,5 @@
 ## code to prepare `weather_Precip` dataset goes here
+library(tidyverse)
 
 weather_list <- chillR::load_temperature_scenarios(path = 'data-raw/',
                                                    prefix = 'cleaned')

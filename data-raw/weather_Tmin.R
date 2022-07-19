@@ -27,7 +27,7 @@ weather_list <- chillR::load_temperature_scenarios(path = 'data-raw/',
 
 
 #take data.frames, drop everything except Day, Year, Month, Tmin; then merge
-weather_Tmin <- purrr::map(aux_weather, function(x){
+weather_Tmin <- purrr::map(weather_list, function(x){
   x[,c('Year', 'Month', 'Day', 'Tmin')] %>%
     filter(Year %in% c(1990, 1991)) %>%
     select(Tmin) %>%
