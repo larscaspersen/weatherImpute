@@ -1,11 +1,30 @@
 Package: weatherImpute
 Type: Package
 Title: Impute gaps in daily weather data
+Description: This package contains functions to impute missing observations in 
+    daily weather data and functions to evaluate the imputations methods.
+Authors@R: 
+    person("Lars", "Caspersen", , "lars.caspersen@uni-bonn.de", role = c("aut", "cre"))
 Version: 0.0.1.0
 RoxygenNote: 7.2.0
 Encoding: UTF-8
-Imports: Rdpack
+Imports:     
+    Amelia,
+    climatol,
+    data.table,
+    dplyr,
+    elevatr,
+    knitr,
+    magrittr,
+    mice,
+    micemd,
+    missForest,
+    pcaMethods,
+    Rdpack,
+    reshape2,
+    sp
 RdMacros: Rdpack
+License: GPL-3
 Depends: 
     R (>= 2.10)
 LazyData: true
