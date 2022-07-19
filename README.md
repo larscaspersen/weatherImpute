@@ -1,1 +1,234 @@
-# weather_impute
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+# weatherImpute
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+weatherImpute is a package designed to allow easy imputation of missing
+observations in daily temperature and precipitation observations.
+Furthermore, it allows a systematic comparison of different imputation
+techniques and an evaluation of these. weatherImpute should help users
+to make a true decision about the imputation method.
+
+## Installation
+
+You can install the development version of weatherImpute from
+[GitHub](https://github.com/larscaspersen/weatherImpute) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("larscaspersen/weather_impute")
+```
+
+## Package content
+
+There are three main functions to use from weatherImpute:
+
+-   `patch_flexible_several_stations()` to patch gaps in a set of
+    weather stations
+-   `get_eval_one_station()` to calculate imputed weather observations
+    for existing observations
+-   `get_eval_metrics()` to calculate performance scores based on the
+    output of the previous function
+
+Furthermore, the package contains a set of imputation methods, which is
+by far not exhaustive. The selection of here presented imputation
+methods is not a recommendation but simply a collection of functions to
+test the packages functionality. The previous mentioned functions were
+designed in such a way, that the inclusion of user-defined imputation
+methods should be relatively easy. The idea of weatherImpute is more of
+a patching-comparison framework than a complete list of recommended
+methods. Currently weatherImpute contains the following patching
+functions, some of them are simple wrapper functions of other packages.
+
+-   `patch_amelia()`: multiple imputations using the Amelia package
+-   `patch_climatol()`: iterative normal ratio using the climatol
+    package
+-   `patch_forest()`: imputation using random forest of the missForest
+    package
+-   `patch_idw()`: imputation using inverse distance weighting
+-   `patch_mean()`: imputation using mean of closest neighbours
+    observations
+-   `patch_mice()`: multiple imputation using mice and micemd package
+-   `patch_normal_ratio()`: imputation using the adjusted normal ratio
+    method
+-   `patch_pca()`: imputation using probebalistic principle component
+    analysis (ppca) or NIPALS method of the pcaMethods package
+
+Furthermore, the package contains several evaluation scores. Similar to
+imputation methods there is a myriad of methods used in weather
+imputation studies. Almost all studies either use the root mean square
+error (RMSE) or the mean absolute error (MAE). But especially for
+precipitation these methods fall short, because not only the
+precipitation amount but also the occurrence is important when
+evaluating imputed precipitation. A summary score can be calculated as
+well, which gives a harmonized overall score, taking all the evaluation
+scores specified in `get_eval_metrics` into account, following the
+approach of Teegavarapu (2014). Again, similar to the patching function,
+emphasis has been put on the possibility to use user-defined evaluation
+scores or functions of other R-packages. Currently the following
+evaluation metrics are available in weatherImpute
+
+-   `calc_d_index()` refined index of agreement
+-   `calc_hanssen_kuipers()` score for preciptiation occurrence
+-   `calc_hit_score()` score for precipitation occurrence
+-   `calc_index_agreement()`
+-   `calc_KS_test()` p-value of Kolmogorov-Sminorv test which checks if
+    two vectors come from the same continous distribtution
+-   `calc_MAE()` mean absolute error
+-   `calc_MCC()` Matthews correlation coefficient, a score used in
+    classification problems (like precipitation occurrence), which is
+    said to handle imbalanced classes (rain / no rain) well
+-   `calc_NSE()` Nash-Sutcliffe model efficiency coefficient
+-   `calc_S_index()` similarity index
+-   `calc_skill_score()` skill score
+
+## How to use the package
+
+``` r
+library(weatherImpute)
+## basic example code
+
+#to impute several stations
+complete_weather <- patch_flexible_several_stations(weather = weather_Tmin, 
+                                target = c('cimis_2', 'cimis_15'), 
+                                weather_info = weather_info, 
+                                method = 'patch_normal_ratio',
+                                method_patches_everything = F)
+
+#compare imputed to actual observations
+patched <- get_eval_one_station(weather = weather_Tmin,
+                     weather_info = weather_info,
+                     target = 'cimis_2', 
+                     patch_methods = c('patch_idw','patch_normal_ratio'), 
+                     method_patches_everything = c(TRUE, FALSE))
+
+#bring result to long format
+patched_long <- reshape2::melt(patched, 
+                               measure.vars =c('patch_idw','patch_normal_ratio'),
+                               variable.name = 'patch_method')
+
+#calculate evaluation scores
+patch_eval <- get_eval_metrics(eval_df = patched_long)
+```
+
+## How to prepare your input data
+
+*This part is still under construction and may be incomplete.*
+
+The input data should be organized in data.frames, one object for
+measured variable. weatherImpute currently supports minimum daily
+temperature, maximum daily temperature and daily precipitation sums. An
+example of the input data can be seen here
+
+``` r
+head(weather_Tmin)
+#> # A tibble: 6 x 17
+#>   Date        Year Month   Day cimis_15 cimis_39 cimis_7 cimis_80 COALINGA.C
+#>   <date>     <dbl> <dbl> <dbl>    <dbl>    <dbl>   <dbl>    <dbl>      <dbl>
+#> 1 1990-01-01  1990     1     1     NA       NA      NA       NA           NA
+#> 2 1990-01-02  1990     1     2     -0.8     -0.7     1.6      0.6         NA
+#> 3 1990-01-03  1990     1     3     -4.4     NA      -2.2     -1.8         NA
+#> 4 1990-01-04  1990     1     4     -5.2     NA      -2.9     -4.1         NA
+#> 5 1990-01-05  1990     1     5     -6       -3.7    -2.5     -3.2         NA
+#> 6 1990-01-06  1990     1     6     -5.1     -3.7    -2.5     -3.4         NA
+#> # ... with 8 more variables: CORCORAN.C <dbl>, FIVE_PTS.C <dbl>,
+#> #   FRESNO.C <dbl>, HANFORD.C <dbl>, MADERA.C <dbl>, PRIESTVY.C <dbl>,
+#> #   VISALIA.C <dbl>, cimis_2 <dbl>
+```
+
+Columns `Date`, `Day`, `Month` and `Year` are mandatory (also the
+spelling of the column name needs to be the same). Every additional
+column is assumed to be a weather statio. Column names of weather
+stations need to be unique and the same as in the `id` column of second
+object needed, which is called `weather_info`. Here is a glimpse of its
+structure
+
+``` r
+head(weather_info)
+#>           id                         Name Longitude Latitude
+#> 1   cimis_15                    Stratford -119.8514 36.15814
+#> 2   cimis_39                      Parlier -119.5041 36.59748
+#> 3    cimis_7             Firebaugh/Telles -120.5910 36.85125
+#> 4   cimis_80                 Fresno State -119.7423 36.82083
+#> 5 COALINGA.C                     Coalinga -120.3500 36.15000
+#> 6 CORCORAN.C Corcoran Irrigation District -119.5667 36.10000
+```
+
+Important are the columns `id`, `Latitude` and `Longitude`. Coordinates
+need to be in the decimal format. The `Name` is less important, but some
+patching functions do not work, if also all entries in that column are
+unique.
+
+An important feature is the compatibility of weatherImpute functions and
+user-defined patching or evaluation functions. Here is an example how to
+integrate a user-defined function in `patch_flexible_several_stations`,
+but the concept is the same for `get_eval_one_station`. user-defined
+function need to be present in the work environment. The user-defined
+patching function needs to fulfil some general features:
+
+-   it takes `weather` as an input and `weather` needs to be organized
+    using the same principles as in \`weather_Tmin
+-   it takes a second object called `weather_info` as an input witht the
+    ids and coordinates of the weather stations. id column and column
+    names in weather need to be the same. Even if the user-defined
+    function does not actually need the object, it is still important
+    that the argument is present in the function call. To put it plain:
+    it needs to be there, no matter if the patching function actually
+    makes use of it
+-   the same is true for the last mandatory argument called `target`,
+    which is a character of the weather station id. Some functions like
+    `patch_climatol` automatically impute data for all weather stations
+    (which makes target obsolete) but the weatherImpute functions still
+    require `target` to be an argument. If it is not needed, then simply
+    putt it as NULL
+
+In most cases patching functions have more arguments. These can be later
+adjusted in the function call with the argument `additional_input` of
+`patch_flexible_several_stations` which is a named list of all further
+specified arguments.
+
+``` r
+
+#example of user-defined patching method
+#maybe built UK traditional method which is also used in chillR
+
+
+#check if function works on weather_Tmin
+
+#integrate in patch_flexible_several_stations call
+```
+
+The same can be done with user-defined evaluation functions. Also
+functions of other packages can be used, the example below also shows
+how to add the RPIQ function of the package chillR. Packages do not
+necissarily need to be loaded, but installed of course. The evaluation
+methods should follow a simple structure: they should have a `predicted`
+argument where the patching functions output goes, an `observed`
+argument where the actually observation of the weather station goes and
+they need to handle missing values (NAs).
+
+``` r
+
+#built user defined evaluation metric
+
+#integrate in get_eval_metrics call; also add metrics of other packages like RPIQ of chillR
+```
+
+## References
+
+<div id="refs" class="references csl-bib-body hanging-indent">
+
+<div id="ref-teegavarapu_missing_2014" class="csl-entry">
+
+Teegavarapu, Ramesh S. V. 2014. “Missing Precipitation Data Estimation
+Using Optimal Proximity Metric-Based Imputation, Nearest-Neighbour
+Classification and Cluster-Based Interpolation Methods.” *Hydrological
+Sciences Journal* 59 (11): 2009–26.
+<https://doi.org/10.1080/02626667.2013.862334>.
+
+</div>
+
+</div>

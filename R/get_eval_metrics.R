@@ -154,7 +154,7 @@ get_eval_metrics <- function(eval_df,
     
     #get maximum value per metric
     max_metric <- intermed[,eval_fun] %>%
-      dplyr::select(is.numeric) %>%
+      dplyr::select(where(is.numeric)) %>%
       dplyr::summarise_all(max)
     
     #bring weights to format of data frame
