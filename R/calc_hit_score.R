@@ -4,10 +4,9 @@
 #' especially suited for precipitation.
 #' 
 #' The hitscore is the mean of correctly identified precipitation events and 
-#' correctly identified dry-events.The function does not evaluate the imputed
-#' precipitation amount but only the precipitation occurence.
-#' 
-#' Add citation
+#' correctly identified dry-events \insertCite{simolo_improving_2010,oriani_missing_2020}{weatherQC}.
+#' The function does not evaluate the imputed precipitation amount but only the 
+#' precipitation occurrence.
 #' 
 #' @param predicted numeric vector containing predicted values
 #' @param observed numeric vector containing observed values, should be of same
@@ -16,6 +15,8 @@
 #' @examples calc_hit_score(predicted = c(rep(0,5), rep(1, 5)), 
 #' observed = c(0,0, 0, 1, 1, 1, 1, 0, 0, 0))
 #' @author Lars Caspersen, \email{lars.caspersen@@uni-bonn.de}
+#' @references
+#' \insertAllCited{}
 #' @export
 calc_hit_score <- function(observed, predicted){
   

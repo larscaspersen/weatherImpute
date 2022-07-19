@@ -2,13 +2,11 @@
 #' 
 #' This function calculates Matthews correlation coefficient (MCC), which is an evaluation metric
 #' especially suited for unbalanced classification problems (like precipitation
-#' occurence)
+#' occurrence)
 #' 
 #' The MCC can range from -1 to 1, where a value close to one indicates good
 #' performance. It handles imbalanced groups better than other popular
 #' classification problem metrics like F1 or accuracy score.
-#' 
-#' Add citation
 #' 
 #' @param predicted numeric vector containing predicted values
 #' @param observed numeric vector containing observed values, should be of same
