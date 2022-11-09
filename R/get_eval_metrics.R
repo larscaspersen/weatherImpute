@@ -64,15 +64,24 @@ get_eval_metrics <- function(eval_df,
          better need to be of same length, when calculating a summary score on all metrics')
   
   
+
   #chechk if patch fun contains duplicated names, if so adjust them to the format by appending .1 
   # if(sum(duplicated(patch_fun)) > 0){
   #   patch_fun <- make.unique(patch_fun, sep = '_')
   # }
   
-  #make eval long
-  # eval_long <- reshape2::melt(eval_df, measure.vars = patch_fun,  variable.name = 'patch_method' )
+  #all column names which are not "Date", "Year", "Month", "Day", "station" or "original" are assumed to be patching methods
+  patch_method <- colnames(eval_df)[!(colnames(eval_df) %in% c("Date", "Year", "Month", "Day", "station", "original"))]
   
-  eval_long = eval_df
+  
+  #make eval long
+  eval_long <- reshape2::melt(eval_df, measure.vars = patch_method,  variable.name = 'patch_method' )
+  
+  #save original name of stations
+  stations_org <- unique(eval_long$station)
+  
+  
+  #eval_long = eval_df
   
   #split dataframe to list
   eval_list <- split(eval_long, f = list(eval_long$station, eval_long$patch_method))
@@ -109,15 +118,21 @@ get_eval_metrics <- function(eval_df,
   id.vars <- (strsplit(names(eval_list), split = '[.]'))
   
   #join them row-wise to data frame
-  id.vars <- lapply(id.vars, function(x) as.data.frame(t(x)))
+  #in case there are . in the station name, only take first (station name) and last (patch_method)
+  id.vars <- lapply(id.vars, function(x) as.data.frame(t(x[c(1,length(x))])))
   id.vars <- dplyr::bind_rows(id.vars)
   colnames(id.vars) <- c('station', 'patch_method')
   
   #only take columns of station and patch_method
   id.vars <- id.vars[,c('station', 'patch_method')]
   
+  
   #join info of station & patch method withh metric outcomes
   eval_metric <- cbind(id.vars, eval_metric)
+
+  #if there was originally a . in the station name it is lost
+  #so exchange station name with original name
+  
   
   #drop nans from eval_metric
   eval_metric <- stats::na.omit(eval_metric)
@@ -182,6 +197,9 @@ get_eval_metrics <- function(eval_df,
   
   #get rid of any 'get_' in the colnames
   colnames(eval_metric) <- gsub(pattern = 'get_', replacement = '',  colnames(eval_metric))
+  
+  #get rid of any 'calc_' in the colnames
+  colnames(eval_metric) <- gsub(pattern = 'calc_', replacement = '',  colnames(eval_metric))
   
   #get rid of package extension like stat:: from column names
   colnames(eval_metric) <- gsub(pattern = '.*::', replacement = '',  colnames(eval_metric))
